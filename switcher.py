@@ -1,4 +1,5 @@
 import os
+import shutil
 
 def is_valid_file(f):
     return not (
@@ -123,6 +124,31 @@ def add_hosts_from_file():
     except FileNotFoundError:
         print("File tidak ditemukan.")
 
+def switch_config_file():
+    ssh_dir = os.path.expanduser("~/.ssh")
+    config_files = [f for f in os.listdir(ssh_dir) if f.startswith("config_")]
+    if not config_files:
+        print("Tidak ada file konfigurasi alternatif yang ditemukan dalam folder .ssh.")
+        return
+
+    print("Pilih file konfigurasi SSH yang ingin digunakan:")
+    for i, config_file in enumerate(config_files):
+        print(f"{i+1}. {config_file}")
+
+    choice = input("Masukkan nomor file konfigurasi: ")
+    try:
+        choice = int(choice)
+        if 1 <= choice <= len(config_files):
+            selected_config_file = config_files[choice - 1]
+            confirm_switch = input(f"Apakah Anda yakin ingin menggunakan {selected_config_file}? (y/n): ")
+            if confirm_switch.lower() == 'y':
+                shutil.copyfile(f"{ssh_dir}/{selected_config_file}", f"{ssh_dir}/config")
+                print(f"Konfigurasi SSH telah diganti dengan {selected_config_file}.")
+        else:
+            print("Nomor file konfigurasi tidak valid.")
+    except ValueError:
+        print("Masukan tidak valid.")
+
 def main():
     while True:
         print("\nMenu:")
@@ -132,7 +158,8 @@ def main():
         print("4. Hapus kunci SSH")
         print("5. Custom konfigurasi SSH")
         print("6. Tambahkan host dari file")
-        print("7. Keluar")
+        print("7. Switch config file")
+        print("8. Keluar")
 
         choice = input("Pilihan Anda: ")
         try:
@@ -173,6 +200,10 @@ def main():
                 if confirm.lower() == 'y':
                     add_hosts_from_file()
             elif choice == 7:
+                confirm = input("Anda yakin ingin mengganti file konfigurasi SSH? (y/n): ")
+                if confirm.lower() == 'y':
+                    switch_config_file()
+            elif choice == 8:
                 confirm = input("Anda yakin ingin keluar? (y/n): ")
                 if confirm.lower() == 'y':
                     print("Terima kasih!")

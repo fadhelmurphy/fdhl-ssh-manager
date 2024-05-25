@@ -14,33 +14,58 @@ pip install .
 
 Setelah menginstal, Anda dapat menjalankan SSH Manager dengan menjalankan perintah `fdhl-ssh-manager` dari terminal.
 
-SSH Manager memiliki beberapa opsi:
+### Menu
 
-1. **Daftar kunci SSH**: Menampilkan daftar kunci SSH yang tersedia dalam folder `.ssh`.
-2. **Pilih kunci SSH**: Memilih kunci SSH yang akan digunakan pada semua host.
-3. **Generate kunci SSH baru**: Menghasilkan kunci SSH baru.
+Setelah menjalankan fdhl-ssh-manager, Anda akan melihat menu dengan beberapa pilihan:
+
+1. **Daftar kunci SSH**: Menampilkan daftar kunci SSH yang tersedia di folder `~/.ssh`.
+2. **Pilih kunci SSH**: Memilih kunci SSH yang akan digunakan dan memperbarui konfigurasi SSH.
+3. **Generate kunci SSH baru**: Membuat kunci SSH baru.
 4. **Hapus kunci SSH**: Menghapus kunci SSH yang dipilih.
-5. **Custom konfigurasi SSH**: Menambahkan konfigurasi SSH secara manual.
-6. **Tambahkan host dari file**: Membaca konfigurasi host dari file teks dan menambahkannya ke konfigurasi SSH.
-7. **Keluar**: Keluar dari SSH Manager.
+5. **Custom konfigurasi SSH**: Menambahkan konfigurasi SSH khusus.
+6. **Tambahkan host dari file**: Menambahkan host SSH dari file teks.
+7. **Switch config file**: Mengganti file konfigurasi SSH dengan file konfigurasi lain yang dipilih.
+8. **Keluar**: Keluar dari aplikasi.
 
-Pastikan untuk memastikan bahwa file `.ssh/config` memiliki izin yang benar sehingga Anda dapat menulis ke dalamnya.
+### Contoh Penggunaan
 
-## Contoh Format File Host
+#### Daftar kunci SSH
 
-Jika Anda memilih opsi untuk menambahkan host dari file, pastikan format file Anda sesuai. Berikut adalah contoh format file host:
+Menampilkan semua kunci SSH yang tersedia di folder `~/.ssh`.
+
+#### Pilih kunci SSH
+
+Memilih kunci SSH yang akan digunakan dan memperbarui file konfigurasi `~/.ssh/config` dengan kunci tersebut.
+
+#### Generate kunci SSH baru
+
+Menghasilkan kunci SSH baru dengan perintah `ssh-keygen`.
+
+#### Hapus kunci SSH
+
+Menghapus kunci SSH yang dipilih dari folder `~/.ssh`.
+
+#### Custom konfigurasi SSH
+
+Menambahkan konfigurasi SSH kustom ke file `~/.ssh/config`. Anda akan diminta untuk memasukkan nama host, hostname, user, dan parameter opsional lainnya.
+
+#### Tambahkan host dari file
+
+Menambahkan host SSH dari file teks. Format file teks harus seperti berikut:
 
 ```
 Host jos
 HostName 108.30.0.1
-HostKeyAlgorithms +ssh-rsa
-PubkeyAcceptedKeyTypes +ssh-rsa
 User root
 
 Host gandos
 HostName 103.30.0.2
 User fadhelganteng
 ```
+
+#### Switch config file
+
+Mengganti file konfigurasi SSH `~/.ssh/config` dengan salah satu file konfigurasi lain yang ada di folder `~/.ssh`. Anda dapat memilih file konfigurasi alternatif seperti `~/.ssh/config_fulltime`, `~/.ssh/config_freelance`, dll.
 
 ## Lisensi
 
