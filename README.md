@@ -1,10 +1,10 @@
-# SSH Manager
+# Sheesh Man
 
-SSH Manager adalah sebuah alat sederhana untuk mengelola kunci SSH pada folder `.ssh`.
+Sheesh Man adalah sebuah alat sederhana untuk mengelola kunci SSH pada folder `.ssh`.
 
 ## Instalasi
 
-Anda dapat menginstal SSH Manager dengan menggunakan pip:
+Anda dapat menginstal Sheesh Man dengan menggunakan pip:
 
 ```
 pip install .
@@ -12,11 +12,11 @@ pip install .
 
 ## Penggunaan
 
-Setelah menginstal, Anda dapat menjalankan SSH Manager dengan menjalankan perintah `fdhl-ssh-manager` dari terminal.
+Setelah menginstal, Anda dapat menjalankan Sheesh Man dengan menjalankan perintah `sheesh-man` dari terminal.
 
 ### Menu
 
-Setelah menjalankan fdhl-ssh-manager, Anda akan melihat menu dengan beberapa pilihan:
+Setelah menjalankan sheesh-man, Anda akan melihat menu dengan beberapa pilihan:
 
 1. **Daftar kunci SSH**: Menampilkan daftar kunci SSH yang tersedia di folder `~/.ssh`.
 2. **Pilih kunci SSH**: Memilih kunci SSH yang akan digunakan dan memperbarui konfigurasi SSH.

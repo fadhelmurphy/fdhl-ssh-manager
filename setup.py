@@ -1,12 +1,12 @@
 from setuptools import setup
 
 setup(
-    name='fdhl-ssh-manager',
+    name='sheesh-man',
     version='1.0.0',
-    py_modules=['switcher'],
+    py_modules=['app'],
     entry_points={
         'console_scripts': [
-            'fdhl-ssh-manager=switcher:main'
+            'sheesh-man=app:main'
         ]
     },
     install_requires=[],
@@ -15,7 +15,7 @@ setup(
     description='SSH key manager tool',
     license='MIT',
     keywords='ssh key manager',
-    url='https://github.com/fadhelmurphy/fdhl-ssh-manager',
+    url='https://github.com/fadhelmurphy/sheesh-man',
     classifiers=[
         'Programming Language :: Python :: 3',
         'License :: OSI Approved :: MIT License',
