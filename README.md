@@ -39,7 +39,7 @@ Memilih kunci SSH yang akan digunakan dan memperbarui file konfigurasi `~/.ssh/c
 
 #### Generate kunci SSH baru
 
-Menghasilkan kunci SSH baru dengan perintah `ssh-keygen`.
+Menghasilkan kunci SSH baru dengan perintah `ssh-keygen -t rsa -b 4096 -C`.
 
 #### Hapus kunci SSH
 
