@@ -35,7 +35,8 @@ def choose_ssh_key(keys):
 def generate_ssh_key():
     ssh_dir = os.path.expanduser("~/.ssh")
     key_name = input("Masukkan nama untuk kunci SSH baru (tanpa ekstensi .pub): ")
-    os.system(f"ssh-keygen -t rsa -b 4096 -C '' -f {ssh_dir}/{key_name}")
+    command = f"ssh-keygen -t rsa -b 4096 -C '' -f {ssh_dir}/{key_name}"
+    os.system(command)
 
 def delete_ssh_key():
     keys = list_ssh_keys()
@@ -55,8 +56,10 @@ def delete_ssh_key():
             key_to_delete = keys[choice - 1]
             confirm_delete = input(f"Apakah Anda yakin ingin menghapus kunci SSH {key_to_delete}? (y/n): ")
             if confirm_delete.lower() == 'y':
-                os.remove(f"{ssh_dir}/{key_to_delete}")
-                os.remove(f"{ssh_dir}/{key_to_delete[:-4]}")
+                os.remove(os.path.join(ssh_dir, key_to_delete))
+                pub_key_to_delete = f"{key_to_delete}.pub"
+                if os.path.exists(os.path.join(ssh_dir, pub_key_to_delete)):
+                    os.remove(os.path.join(ssh_dir, pub_key_to_delete))
                 print(f"Kunci SSH {key_to_delete} telah dihapus.")
         else:
             print("Nomor kunci tidak valid.")
@@ -126,26 +129,25 @@ def add_hosts_from_file():
 
 def switch_config_file():
     ssh_dir = os.path.expanduser("~/.ssh")
-    config_files = [f for f in os.listdir(ssh_dir) if f.startswith("config_")]
+    config_files = [f for f in os.listdir(ssh_dir) if f.startswith("config")]
+
     if not config_files:
-        print("Tidak ada file konfigurasi alternatif yang ditemukan dalam folder .ssh.")
+        print("Tidak ada file konfigurasi yang ditemukan dalam folder .ssh.")
         return
 
     print("Pilih file konfigurasi SSH yang ingin digunakan:")
     for i, config_file in enumerate(config_files):
         print(f"{i+1}. {config_file}")
 
-    choice = input("Masukkan nomor file konfigurasi: ")
+    choice = input("Masukkan nomor konfigurasi yang ingin digunakan: ")
     try:
         choice = int(choice)
         if 1 <= choice <= len(config_files):
-            selected_config_file = config_files[choice - 1]
-            confirm_switch = input(f"Apakah Anda yakin ingin menggunakan {selected_config_file}? (y/n): ")
-            if confirm_switch.lower() == 'y':
-                shutil.copyfile(f"{ssh_dir}/{selected_config_file}", f"{ssh_dir}/config")
-                print(f"Konfigurasi SSH telah diganti dengan {selected_config_file}.")
+            selected_config = config_files[choice - 1]
+            shutil.copy(os.path.join(ssh_dir, selected_config), os.path.join(ssh_dir, "config"))
+            print(f"File konfigurasi {selected_config} telah digunakan sebagai konfigurasi aktif.")
         else:
-            print("Nomor file konfigurasi tidak valid.")
+            print("Nomor konfigurasi tidak valid.")
     except ValueError:
         print("Masukan tidak valid.")
 
@@ -189,8 +191,9 @@ def main():
                 if confirm.lower() == 'y':
                     generate_ssh_key()
             elif choice == 4:
-                keys = list_ssh_keys()
-                delete_ssh_key(keys)
+                confirm = input("Anda yakin ingin menghapus kunci SSH? (y/n): ")
+                if confirm.lower() == 'y':
+                    delete_ssh_key()
             elif choice == 5:
                 confirm = input("Anda yakin ingin menambahkan custom konfigurasi SSH? (y/n): ")
                 if confirm.lower() == 'y':
