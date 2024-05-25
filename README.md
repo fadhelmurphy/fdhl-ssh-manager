@@ -55,12 +55,12 @@ Menambahkan host SSH dari file teks. Format file teks harus seperti berikut:
 
 ```
 Host jos
-HostName 108.30.0.1
-User root
+    HostName 108.30.0.1
+    User root
 
 Host gandos
-HostName 103.30.0.2
-User fadhelganteng
+    HostName 103.30.0.2
+    User fadhelganteng
 ```
 
 #### Switch config file
