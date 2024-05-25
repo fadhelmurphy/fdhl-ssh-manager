@@ -1,13 +1,17 @@
 import os
 
+def is_valid_file(f):
+    return not (
+        f.endswith(".pub") or 
+        f.endswith(".pem") or
+        f.startswith("known_") or
+        f.startswith("config") or
+        f.startswith(".DS_Store")
+    )
+
 def list_ssh_keys():
     ssh_dir = os.path.expanduser("~/.ssh")
-    keys = [f for f in os.listdir(ssh_dir) if not f.endswith(".pub") and 
-            not f.startswith("known_") and 
-            not f.startswith("config") and
-            not f.startswith(".DS_Store") and
-            not f.endswith(".pem") 
-            ]
+    keys = [f for f in os.listdir(ssh_dir) if is_valid_file(f)]
     return keys
 
 def choose_ssh_key(keys):
