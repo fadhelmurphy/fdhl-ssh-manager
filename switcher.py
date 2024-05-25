@@ -2,7 +2,12 @@ import os
 
 def list_ssh_keys():
     ssh_dir = os.path.expanduser("~/.ssh")
-    keys = [f for f in os.listdir(ssh_dir) if not f.endswith(".pub") and not f.startswith("known_") and not f.startswith("config")]
+    keys = [f for f in os.listdir(ssh_dir) if not f.endswith(".pub") and 
+            not f.startswith("known_") and 
+            not f.startswith("config") and
+            not f.startswith(".DS_Store") and
+            not f.endswith(".pem") 
+            ]
     return keys
 
 def choose_ssh_key(keys):
