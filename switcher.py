@@ -55,7 +55,7 @@ def delete_ssh_key():
 
 def update_ssh_config(selected_key):
     ssh_config_path = os.path.expanduser("~/.ssh/config")
-    with open(ssh_config_path, "a") as f:
+    with open(ssh_config_path, "w") as f:
         f.write("\n")
         f.write("Host *\n")
         f.write(f"    IdentityFile ~/.ssh/{selected_key}\n")
