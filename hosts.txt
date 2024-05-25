@@ -1,9 +1,9 @@
-Host fdn
-	    HostName 52.76.160.99
+Host jos
+        HostName 108.30.0.1
         HostKeyAlgorithms +ssh-rsa
-    	PubkeyAcceptedKeyTypes +ssh-rsa
-	    User root
+        PubkeyAcceptedKeyTypes +ssh-rsa
+        User root
 
-Host spin
-        HostName 103.159.196.46
-        User datapi
+Host gandos
+        HostName 103.30.0.2
+        User fadhelganteng
