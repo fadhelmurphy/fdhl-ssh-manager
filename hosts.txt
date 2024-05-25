@@ -1,41 +1,9 @@
-Host bitbucket.org
-        HostName  altssh.bitbucket.org
-        Port 443
-
-Host fdn
-        HostName 52.76.160.99
+Host jos
+        HostName 108.30.0.1
+        HostKeyAlgorithms +ssh-rsa
+        PubkeyAcceptedKeyTypes +ssh-rsa
         User root
 
-Host eno 
-        HostName 103.183.74.41
-        User tujjuvm
-
-Host spin 
-        UseKeychain yes
-        AddKeysToAgent yes
-        HostName 103.159.196.46
-        User datapi
-
-Host github.com
-        HostName github.com
-        PreferredAuthentications publickey
-
-Host gitlab.com
-        HostName gitlab.com   
-        PreferredAuthentications publickey
-        
-Host teleskop
-        HostName 188.166.205.142
-        User root
-
-Host teleskop-brazil
-        HostName 185.137.92.102
-        User root
-
-Host teleskop-airflow
-        HostName 159.223.75.7
-        User root
-
-Host teleskop-dashboard
-        HostName 152.42.222.51
-        User root
+Host gandos
+        HostName 103.30.0.2
+        User fadhelganteng
