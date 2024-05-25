@@ -10,12 +10,12 @@ setup(
         ]
     },
     install_requires=[],
-    author='Your Name',
-    author_email='your.email@example.com',
+    author='Fadhel',
+    author_email='fadhelijlalfalah@gmail.com',
     description='SSH key manager tool',
     license='MIT',
     keywords='ssh key manager',
-    url='https://github.com/yourusername/fdhl-ssh-manager',
+    url='https://github.com/fadhelmurphy/fdhl-ssh-manager',
     classifiers=[
         'Programming Language :: Python :: 3',
         'License :: OSI Approved :: MIT License',
