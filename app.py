@@ -16,7 +16,7 @@ def list_ssh_keys():
     return keys
 
 def choose_ssh_key(keys):
-    print("Pilih kunci SSH yang ingin digunakan:")
+    print("Pilih SSH key yang ingin digunakan:")
     for i, key in enumerate(keys):
         print(f"{i+1}. {key}")
 
@@ -34,17 +34,17 @@ def choose_ssh_key(keys):
 
 def generate_ssh_key():
     ssh_dir = os.path.expanduser("~/.ssh")
-    key_name = input("Masukkan nama untuk kunci SSH baru (tanpa ekstensi .pub): ")
+    key_name = input("Masukkan nama untuk SSH key baru (tanpa ekstensi .pub): ")
     command = f"ssh-keygen -t rsa -b 4096 -C '' -f {ssh_dir}/{key_name}"
     os.system(command)
 
 def delete_ssh_key():
     keys = list_ssh_keys()
     if not keys:
-        print("Tidak ada kunci SSH yang ditemukan dalam folder .ssh.")
+        print("Tidak ada SSH key yang ditemukan dalam folder .ssh.")
         return
 
-    print("Pilih kunci SSH yang ingin dihapus:")
+    print("Pilih SSH key yang ingin dihapus:")
     for i, key in enumerate(keys):
         print(f"{i+1}. {key}")
 
@@ -54,13 +54,13 @@ def delete_ssh_key():
         if 1 <= choice <= len(keys):
             ssh_dir = os.path.expanduser("~/.ssh")
             key_to_delete = keys[choice - 1]
-            confirm_delete = input(f"Apakah Anda yakin ingin menghapus kunci SSH {key_to_delete}? (y/n): ")
+            confirm_delete = input(f"Apakah Anda yakin ingin menghapus SSH key {key_to_delete}? (y/n): ")
             if confirm_delete.lower() == 'y':
                 os.remove(os.path.join(ssh_dir, key_to_delete))
                 pub_key_to_delete = f"{key_to_delete}.pub"
                 if os.path.exists(os.path.join(ssh_dir, pub_key_to_delete)):
                     os.remove(os.path.join(ssh_dir, pub_key_to_delete))
-                print(f"Kunci SSH {key_to_delete} telah dihapus.")
+                print(f"SSH key {key_to_delete} telah dihapus.")
         else:
             print("Nomor kunci tidak valid.")
     except ValueError:
@@ -151,47 +151,93 @@ def switch_config_file():
     except ValueError:
         print("Masukan tidak valid.")
 
+def list_host_servers(select=False):
+    ssh_config_path = os.path.expanduser("~/.ssh/config")
+    try:
+        with open(ssh_config_path, "r") as f:
+            lines = f.readlines()
+            hosts = []
+            for line in lines:
+                if line.strip().startswith("Host ") and not any(keyword in line for keyword in ["github", "bitbucket", "gitlab"]):
+                    host = line.split()[1:]
+                    for h in host:
+                        if h != '*':
+                            hosts.append(h.split()[0])
+            if hosts:
+                print("Daftar host server:")
+                for i, host in enumerate(hosts, start=1):
+                    if select:
+                        print(f"{i}. {host}")
+                    else:
+                        print(host)
+                return hosts
+            else:
+                print("Tidak ada host server yang ditemukan.")
+                return []
+    except FileNotFoundError:
+        print("File konfigurasi SSH tidak ditemukan.")
+
+def connect_to_host(host):
+    os.system(f"ssh {host}")
+
+def select_non_git_host(hosts):
+    if hosts:
+        try:
+            choice = int(input("Pilih nomor host yang ingin digunakan: "))
+            if 1 <= choice <= len(hosts):
+                selected_host = hosts[choice - 1]
+                print(f"Anda telah memilih host: {selected_host}")
+                connect_to_host(selected_host)
+            else:
+                print("Nomor host tidak valid.")
+        except ValueError:
+            print("Masukan tidak valid.")
+    else:
+        print("Tidak ada host server yang ditemukan.")
+
 def main():
     while True:
         print("\nMenu:")
-        print("1. Daftar kunci SSH")
-        print("2. Pilih kunci SSH")
-        print("3. Generate kunci SSH baru")
-        print("4. Hapus kunci SSH")
+        print("1. Daftar SSH key")
+        print("2. Pilih SSH key")
+        print("3. Generate SSH key baru")
+        print("4. Hapus SSH key")
         print("5. Custom konfigurasi SSH")
         print("6. Tambahkan host dari file")
         print("7. Switch config file")
-        print("8. Keluar")
+        print("8. Tampilkan daftar host server")
+        print("9. Masuk ke salah satu host server")
+        print("0. Keluar")
 
         choice = input("Pilihan Anda: ")
         try:
             choice = int(choice)
             if choice == 1:
-                confirm = input("Anda yakin ingin menampilkan daftar kunci SSH? (y/n): ")
+                confirm = input("Anda yakin ingin menampilkan daftar SSH key? (y/n): ")
                 if confirm.lower() == 'y':
                     keys = list_ssh_keys()
                     if keys:
-                        print("Kunci SSH yang tersedia:")
+                        print("SSH key yang tersedia:")
                         for key in keys:
                             print(key)
                     else:
-                        print("Tidak ada kunci SSH yang ditemukan dalam folder .ssh.")
+                        print("Tidak ada SSH key yang ditemukan dalam folder .ssh.")
             elif choice == 2:
-                confirm = input("Anda yakin ingin memilih kunci SSH? (y/n): ")
+                confirm = input("Anda yakin ingin memilih SSH key? (y/n): ")
                 if confirm.lower() == 'y':
                     keys = list_ssh_keys()
                     if not keys:
-                        print("Tidak ada kunci SSH yang ditemukan dalam folder .ssh.")
+                        print("Tidak ada SSH key yang ditemukan dalam folder .ssh.")
                         continue
                     selected_key = choose_ssh_key(keys)
                     if selected_key:
                         update_ssh_config(selected_key)
             elif choice == 3:
-                confirm = input("Anda yakin ingin mengenerate kunci SSH baru? (y/n): ")
+                confirm = input("Anda yakin ingin mengenerate SSH key baru? (y/n): ")
                 if confirm.lower() == 'y':
                     generate_ssh_key()
             elif choice == 4:
-                confirm = input("Anda yakin ingin menghapus kunci SSH? (y/n): ")
+                confirm = input("Anda yakin ingin menghapus SSH key? (y/n): ")
                 if confirm.lower() == 'y':
                     delete_ssh_key()
             elif choice == 5:
@@ -207,6 +253,15 @@ def main():
                 if confirm.lower() == 'y':
                     switch_config_file()
             elif choice == 8:
+                confirm = input("Anda yakin ingin menampilkan daftar host server? (y/n): ")
+                if confirm.lower() == 'y':
+                    list_host_servers()
+            elif choice == 9:
+                confirm = input("Anda yakin ingin masuk ke salah satu host server? (y/n): ")
+                if confirm.lower() == 'y':
+                    hosts = list_host_servers(select=True)
+                    select_non_git_host(hosts)
+            elif choice == 0:
                 confirm = input("Anda yakin ingin keluar? (y/n): ")
                 if confirm.lower() == 'y':
                     print("Terima kasih!")
