@@ -55,7 +55,7 @@ def delete_ssh_key():
 
 def update_ssh_config(selected_key):
     ssh_config_path = os.path.expanduser("~/.ssh/config")
-    with open(ssh_config_path, "a") as f:
+    with open(ssh_config_path, "w") as f:
         f.write("\n")
         f.write("Host *\n")
         f.write(f"    IdentityFile ~/.ssh/{selected_key}\n")
@@ -96,12 +96,19 @@ def add_hosts_from_file():
                 elif line.startswith("User "):
                     user = line.split()[1]
                     host_info[host_name]["User"] = user
+                elif line.startswith("Port "):
+                    port = line.split()[1]
+                    host_info[host_name]["Port"] = port
 
         with open(os.path.expanduser("~/.ssh/config"), "a") as ssh_config_file:
             for host, info in host_info.items():
                 ssh_config_file.write(f"\nHost {host}\n")
-                ssh_config_file.write(f"    HostName {info['HostName']}\n")
-                ssh_config_file.write(f"    User {info['User']}\n")
+                if 'HostName' in info:
+                    ssh_config_file.write(f"    HostName {info['HostName']}\n")
+                if 'User' in info:
+                    ssh_config_file.write(f"    User {info['User']}\n")
+                if 'Port' in info:
+                    ssh_config_file.write(f"    Port {info['Port']}\n")
         
         print("Konfigurasi host telah ditambahkan.")
     except FileNotFoundError:
