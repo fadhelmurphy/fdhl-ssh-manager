@@ -1,0 +1,9 @@
+Host fdn
+	    HostName 52.76.160.99
+        HostKeyAlgorithms +ssh-rsa
+    	PubkeyAcceptedKeyTypes +ssh-rsa
+	    User root
+
+Host spin
+        HostName 103.159.196.46
+        User datapi

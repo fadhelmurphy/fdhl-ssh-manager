@@ -55,11 +55,57 @@ def delete_ssh_key():
 
 def update_ssh_config(selected_key):
     ssh_config_path = os.path.expanduser("~/.ssh/config")
-    with open(ssh_config_path, "w") as f:
+    with open(ssh_config_path, "a") as f:
         f.write("\n")
         f.write("Host *\n")
         f.write(f"    IdentityFile ~/.ssh/{selected_key}\n")
     print("Konfigurasi SSH telah diperbarui.")
+
+def custom_ssh_config():
+    ssh_config_path = os.path.expanduser("~/.ssh/config")
+    host = input("Masukkan nama host: ")
+    hostname = input("Masukkan Hostname: ")
+    host_key_algorithms = input("Masukkan HostKeyAlgorithms (opsional): ")
+    pubkey_accepted_key_types = input("Masukkan PubkeyAcceptedKeyTypes (opsional): ")
+    user = input("Masukkan User: ")
+    with open(ssh_config_path, "a") as f:
+        f.write("\n")
+        f.write(f"Host {host}\n")
+        f.write(f"    HostName {hostname}\n")
+        if host_key_algorithms:
+            f.write(f"    HostKeyAlgorithms {host_key_algorithms}\n")
+        if pubkey_accepted_key_types:
+            f.write(f"    PubkeyAcceptedKeyTypes {pubkey_accepted_key_types}\n")
+        f.write(f"    User {user}\n")
+    print("Konfigurasi SSH telah ditambahkan.")
+
+def add_hosts_from_file():
+    filename = input("Masukkan nama file yang berisi daftar host: ")
+    try:
+        with open(filename, "r") as file:
+            lines = file.readlines()
+            host_info = {}
+            for line in lines:
+                line = line.strip()
+                if line.startswith("Host "):
+                    host_name = line.split()[1]
+                    host_info[host_name] = {}
+                elif line.startswith("HostName "):
+                    hostname = line.split()[1]
+                    host_info[host_name]["HostName"] = hostname
+                elif line.startswith("User "):
+                    user = line.split()[1]
+                    host_info[host_name]["User"] = user
+
+        with open(os.path.expanduser("~/.ssh/config"), "a") as ssh_config_file:
+            for host, info in host_info.items():
+                ssh_config_file.write(f"\nHost {host}\n")
+                ssh_config_file.write(f"    HostName {info['HostName']}\n")
+                ssh_config_file.write(f"    User {info['User']}\n")
+        
+        print("Konfigurasi host telah ditambahkan.")
+    except FileNotFoundError:
+        print("File tidak ditemukan.")
 
 def main():
     while True:
@@ -68,7 +114,9 @@ def main():
         print("2. Pilih kunci SSH")
         print("3. Generate kunci SSH baru")
         print("4. Hapus kunci SSH")
-        print("5. Keluar")
+        print("5. Custom konfigurasi SSH")
+        print("6. Tambahkan host dari file")
+        print("7. Keluar")
 
         choice = input("Pilihan Anda: ")
         try:
@@ -101,6 +149,14 @@ def main():
                 keys = list_ssh_keys()
                 delete_ssh_key(keys)
             elif choice == 5:
+                confirm = input("Anda yakin ingin menambahkan custom konfigurasi SSH? (y/n): ")
+                if confirm.lower() == 'y':
+                    custom_ssh_config()
+            elif choice == 6:
+                confirm = input("Anda yakin ingin menambahkan host dari file? (y/n): ")
+                if confirm.lower() == 'y':
+                    add_hosts_from_file()
+            elif choice == 7:
                 confirm = input("Anda yakin ingin keluar? (y/n): ")
                 if confirm.lower() == 'y':
                     print("Terima kasih!")
